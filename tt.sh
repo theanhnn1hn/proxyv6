@@ -53,7 +53,7 @@ while [ ! -n "$STATIC" ]; do
 done
 
 while [[ $IP6PREFIXLEN -ne 48 ]] && [[ $IP6PREFIXLEN -ne 64 ]] && [[ $IP6PREFIXLEN -ne 112 ]] && [[ $IP6PREFIXLEN -ne 32 ]]; do
-    eecho "Please input prefixlen for IPv6: (32/48/64/112, 112 as default)"
+    eecho "Please input prefixlen for IPv6: (---32/48/64/112---, 112 as default)"
     read IP6PREFIXLEN
     if [ ! $IP6PREFIXLEN ]; then
         IP6PREFIXLEN=112
