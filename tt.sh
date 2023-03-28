@@ -57,7 +57,7 @@ while [[ $IP6PREFIXLEN -ne 48 ]] && [[ $IP6PREFIXLEN -ne 64 ]] && [[ $IP6PREFIXL
     eecho "Please input prefixlen for IPv6: (---32/48/64/112---, 64 as default)"
     read IP6PREFIXLEN
     if [ ! $IP6PREFIXLEN ]; then
-        IP6PREFIXLEN=112
+        IP6PREFIXLEN=64
     fi
 done
 
