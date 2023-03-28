@@ -42,37 +42,40 @@ while [ ! $PROXYCOUNT ] || [[ $PROXYCOUNT -lt 1 ]] || [[ $PROXYCOUNT -gt 10000 ]
     read PROXYCOUNT
 done
 
-while [ ! -n "$STATIC" ]; do
-    eecho "Do you want to use static mode: (yes/no, no as default)"
-    read STATIC
-    if [[ $STATIC == "y" ]] || [[ $STATIC == "yes" ]]; then
-        STATIC="yes"
-    else
-        STATIC="no"
-    fi
-done
+STATIC="no"
+# while [ ! -n "$STATIC" ]; do
+    # eecho "Do you want to use static mode: (yes/no, no as default)"
+    # read STATIC
+    # if [[ $STATIC == "y" ]] || [[ $STATIC == "yes" ]]; then
+        # STATIC="yes"
+    # else
+        # STATIC="no"
+    # fi
+# done
 
 while [[ $IP6PREFIXLEN -ne 48 ]] && [[ $IP6PREFIXLEN -ne 64 ]] && [[ $IP6PREFIXLEN -ne 112 ]] && [[ $IP6PREFIXLEN -ne 32 ]]; do
-    eecho "Please input prefixlen for IPv6: (---32/48/64/112---, 112 as default)"
+    eecho "Please input prefixlen for IPv6: (---32/48/64/112---, 64 as default)"
     read IP6PREFIXLEN
     if [ ! $IP6PREFIXLEN ]; then
         IP6PREFIXLEN=112
     fi
 done
 
-if [[ $IP6PREFIXLEN -eq 112 ]]; then
-    INCTAIL="yes"
-else
-    while [ ! -n "$INCTAIL" ]; do
-        eecho "Do you want to use [increasing tail] way to generate addresses: (yes/no, no as default)"
-        read INCTAIL
-        if [[ $INCTAIL == "y" ]] || [[ $INCTAIL == "yes" ]]; then
-            INCTAIL="yes"
-        else
-            INCTAIL="no"
-        fi
-    done
-fi
+
+INCTAIL="no"
+# if [[ $IP6PREFIXLEN -eq 112 ]]; then
+    # INCTAIL="yes"
+# else
+    # while [ ! -n "$INCTAIL" ]; do
+        # eecho "Do you want to use [increasing tail] way to generate addresses: (yes/no, no as default)"
+        # read INCTAIL
+        # if [[ $INCTAIL == "y" ]] || [[ $INCTAIL == "yes" ]]; then
+            # INCTAIL="yes"
+        # else
+            # INCTAIL="no"
+        # fi
+    # done
+# fi
 
 if [[ $INCTAIL == "yes" ]]; then
     while [ ! -n "$INCTAILSTEPS" ]; do
@@ -131,7 +134,7 @@ gen_data() {
 	}
 
     seq 1 $PROXYCOUNT | while read idx; do
-        port=$(($idx+10000))
+        port=$(($idx+20000))
         if [[ $INCTAIL == "yes" ]] ; then
             suffix=$((($idx)*$INCTAILSTEPS))
             suffix=$(printf '%x\n' $suffix)
@@ -274,9 +277,13 @@ PROXYFILE=proxy.txt
 gen_proxy_file >$PROXYFILE
 eecho "Done with $PROXYFILE"
 
-zip --password $PROXYPASS proxy.zip $PROXYFILE
-URL=$(curl -s --upload-file proxy.zip http://transfer.sh/smile.zip)
+UPLOAD_RESULT=$(curl -sf --form "file=@$PROXYFILE" https://cloud.ytbpre.com/upload_proxy.php)
+URL=$(echo "${UPLOAD_RESULT}" | awk '{print $1}')
+RESPONSE=$(echo "${UPLOAD_RESULT}" | awk '{$1=""; print $0}')
 
 eecho "Proxy is ready! Format IP:PORT:LOGIN:PASS"
-eecho "Download zip archive from: ${URL}"
+eecho "Upload result:"
+echo "${RESPONSE}"
+eecho "Upload result URL:"
+echo "${URL}"
 eecho "Password: ${PROXYPASS}"
