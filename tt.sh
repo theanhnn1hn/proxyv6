@@ -110,21 +110,23 @@ while [ ! -n "$ETHNAME" ]; do
   fi
 done
 
-while [ ! -n "$PROXYUSER" ]; do
-    eecho "Please input username for proxy: (smile as default)"
-    read PROXYUSER
-    if [[ $PROXYUSER == "" ]]; then
-        PROXYUSER="smile"
-    fi
-done
+PROXYUSER="yag"
+# while [ ! -n "$PROXYUSER" ]; do
+    # eecho "Please input username for proxy: (smile as default)"
+    # read PROXYUSER
+    # if [[ $PROXYUSER == "" ]]; then
+        # PROXYUSER="smile"
+    # fi
+# done
 
-while [ ! -n "$PROXYPASS" ]; do
-    eecho "Please input password for proxy: (girl as default)"
-    read PROXYPASS
-    if [[ $PROXYPASS == "" ]]; then
-        PROXYPASS="girl"
-    fi
-done
+PROXYPASS="anhbiencong"
+# while [ ! -n "$PROXYPASS" ]; do
+    # eecho "Please input password for proxy: (girl as default)"
+    # read PROXYPASS
+    # if [[ $PROXYPASS == "" ]]; then
+        # PROXYPASS="girl"
+    # fi
+# done
 
 #################### functions ####################
 gen_data() {
