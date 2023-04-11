@@ -31,22 +31,17 @@ fi
 while [[ $IP6 != *:* ]] || [ ! -n "$IP6" ]; do
     eecho "IPv6 Nout Found, Please check environment. Exit"
     exit
-#   eecho "Invalid IPv6, Please input it manually:"
-#   read IP6
 done
 
-while [ ! $PROXYCOUNT ] || [[ $PROXYCOUNT -lt 1 ]] || [[ $PROXYCOUNT -gt 10000 ]]; do
-    eecho "How many proxy do you want to create? 1-10000"
-    read PROXYCOUNT
-done
+PROXYCOUNT=200
 
 STATIC="no"
 INCTAIL="no"
 INCTAILSTEPS=1
-IP6PREFIXLEN = 64
+IP6PREFIXLEN=64
 IP6PREFIX=$(echo $IP6 | cut -f1-4 -d':')
 eecho "IPv6 PrefixLen: $IP6PREFIXLEN --> Prefix: $IP6PREFIX"
-ETHNAME="eth0"
+ETHNAME=$(ip -o -4 route show to default | awk '{print $5}')
 PROXYUSER="yag"
 PROXYPASS="anhbiencong"
 
